@@ -79,10 +79,10 @@ class Queue: public List<T> {
     }
 
     std::ostream &print(std::ostream &stream) const override {
-        typename List<T>::Node *cur = head;
-        while (cur->next) {
-            std::cout << cur->data << "->";
-            cur = cur->next;
+        auto cur = begin();
+        while (cur + 1 != end()) {
+            std::cout << cur->data << "<-";
+            cur++;
         }
         std::cout << cur->data;
 
@@ -122,6 +122,29 @@ class Queue: public List<T> {
         *this = q;
         return *this;
     }
+
+    typedef typename List<T>::iterator iterator;
+
+    iterator begin() const {return iterator(head);} ;
+    iterator end() const{
+        typename List<T>::Node *tmp = head;
+        for (int i = 0; i < List<T>::size - 1; ++i) {
+            tmp = tmp->next;
+        }
+        return iterator(tmp->next);
+    }
+
+    typedef typename List<T>::const_iterator const_iterator;
+
+    const_iterator cbegin() const {return const_iterator(head);};
+    const_iterator cend() const {
+        const typename List<T>::Node *tmp = head;
+        for (int i = 0 ; i < List<T>::size - 1; ++i) {
+            tmp = tmp->next;
+        }
+        return const_iterator(tmp->next);
+    }
+
   private:
     typename List<T>::Node *tail;
     typename List<T>::Node *head;
