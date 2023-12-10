@@ -8,7 +8,7 @@ protected:
     public:
         Node *next;
         T data;
-        Node(T value = T(), Node* _next = nullptr) : data(value), next(_next) {};
+        Node(T value = T(), Node* _next = nullptr) : next(_next), data(value) {}
     };
 
     size_t size;
@@ -16,9 +16,9 @@ protected:
     virtual std::ostream& print(std::ostream& os) const = 0;
     virtual std::istream& scan(std::istream& is) = 0;
 public:
-    List() {};
+    List() {}
 
-    virtual ~List() {};
+    virtual ~List() {}
     virtual T getFront() const = 0;
     virtual bool isEmpty() const = 0;
     virtual size_t getSize() const = 0;
@@ -62,11 +62,11 @@ public:
 
         iterator operator + (size_t a) {
             iterator tmp = *this;
-            for (int i = 0; i < a; ++i) {
+            for (size_t i = 0; i < a; ++i) {
                 tmp++;
             }
             return tmp;
-        };
+        }
 
         friend const_iterator;
       private:
@@ -83,7 +83,7 @@ public:
         using pointer = const Node*;
         using reference = const Node&;
 
-        reference operator * () const {return *p;}
+        reference operator * () const {return p->data;}
         pointer operator -> () const {return p;}
 
         const_iterator &operator ++ () {p = p->next; return *this;}
@@ -97,7 +97,7 @@ public:
 
         const_iterator operator + (size_t a) {
             const_iterator tmp = *this;
-            for (int i = 0; i < a; ++i) {
+            for (size_t i = 0; i < a; ++i) {
                 tmp++;
             }
             return tmp;
@@ -107,5 +107,14 @@ public:
       private:
         const List<T>::Node *p;
     };
+
+    virtual iterator begin() = 0;
+    virtual iterator end() = 0;
+
+    virtual const_iterator begin() const = 0;
+    virtual const_iterator end() const = 0;
+
+    virtual const_iterator cbegin() const = 0;
+    virtual const_iterator cend() const = 0;
 
 };

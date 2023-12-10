@@ -10,9 +10,7 @@ class Stack: public List<T> {
     }
     
     ~Stack() {
-        while (!isEmpty()) {
-            pop();
-        }
+        while (!isEmpty()) pop();
     }
 
     Stack(const Stack &other) {
@@ -128,10 +126,10 @@ class Stack: public List<T> {
     }
     typedef typename List<T>::iterator iterator;
 
-    iterator begin() const {return iterator(head);} ;
-    iterator end() const{
+    iterator begin() override {return iterator(head);} ;
+    iterator end() override {
         typename List<T>::Node *tmp = head;
-        for (int i = 0; i < List<T>::size - 1; ++i) {
+        for (size_t i = 0; i < List<T>::size - 1; ++i) {
             tmp = tmp->next;
         }
         return iterator(tmp->next);
@@ -139,14 +137,28 @@ class Stack: public List<T> {
 
     typedef typename List<T>::const_iterator const_iterator;
 
-    const_iterator cbegin() const {return const_iterator(head);};
-    const_iterator cend() const {
+    const_iterator cbegin() const override {return const_iterator(head);};
+    const_iterator cend() const override {
         const typename List<T>::Node *tmp = head;
-        for (int i = 0 ; i < List<T>::size - 1; ++i) {
+        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
             tmp = tmp->next;
         }
         return const_iterator(tmp->next);
     }
+
+
+    const_iterator begin() const override {
+        return const_iterator(head);
+    };
+
+
+    const_iterator end() const override {
+        const typename List<T>::Node *tmp = head;
+        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
+            tmp = tmp->next;
+        }
+        return const_iterator(tmp->next);
+    };
 
   private:
     typename List<T>::Node* head;   

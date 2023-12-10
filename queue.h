@@ -1,10 +1,11 @@
-#include <iostream>
+#pragma once
+
 #include "abstract.h"
 
 template <typename T>
 class Queue: public List<T> {
   public:
-    Queue(): head(nullptr), tail(nullptr) {
+    Queue(): tail(nullptr),  head(nullptr) {
         List<T>::size = 0;
     };
 
@@ -12,10 +13,10 @@ class Queue: public List<T> {
         while (!isEmpty()) pop();
     }
 
-    Queue(const Queue& other) {
+    Queue(const Queue &other) {
         typename List<T>::Node *cur = other.head;
         this->head = new typename List<T>::Node(cur->data);
-        typename List<T>::Node* ncur = this->head;
+        typename List<T>::Node *ncur = this->head;
         List<T>::size = other.size;
 
         while (cur->next) {
@@ -113,6 +114,16 @@ class Queue: public List<T> {
 
         return *this;
     }
+
+    Queue &operator = (Queue &&other)  {
+        clear();
+        List<T>::size = other.size;
+        this->head = other.head;
+        this->tail = other.tail;
+        other.head = nullptr;
+        other.tail = nullptr;
+        return *this;
+    }
     
     Queue &operator = (const List<T> &l) override {
         if (&l == this) {
@@ -124,26 +135,35 @@ class Queue: public List<T> {
     }
 
     typedef typename List<T>::iterator iterator;
+    typedef typename List<T>::const_iterator const_iterator;
 
-    iterator begin() const {return iterator(head);} ;
-    iterator end() const{
+    iterator begin() override {return iterator(head);} ;
+    iterator end() override {
         typename List<T>::Node *tmp = head;
-        for (int i = 0; i < List<T>::size - 1; ++i) {
+        for (size_t i = 0; i < List<T>::size - 1; ++i) {
             tmp = tmp->next;
         }
         return iterator(tmp->next);
     }
 
-    typedef typename List<T>::const_iterator const_iterator;
-
-    const_iterator cbegin() const {return const_iterator(head);};
-    const_iterator cend() const {
+    const_iterator begin() const override {return const_iterator(head);};
+    const_iterator end() const override {
         const typename List<T>::Node *tmp = head;
-        for (int i = 0 ; i < List<T>::size - 1; ++i) {
+        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
             tmp = tmp->next;
         }
         return const_iterator(tmp->next);
     }
+
+    const_iterator cbegin() const override {return const_iterator(head);};
+    const_iterator cend() const override {
+        const typename List<T>::Node *tmp = head;
+        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
+            tmp = tmp->next;
+        }
+        return const_iterator(tmp->next);
+    }
+
 
   private:
     typename List<T>::Node *tail;
