@@ -48,4 +48,3 @@ int main()
     cout << s3.getSize() << endl;  // 3->4->5->9
 
 }
-

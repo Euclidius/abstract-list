@@ -13,8 +13,6 @@ protected:
 
     size_t size;
 
-    virtual std::ostream& print(std::ostream& os) const = 0;
-    virtual std::istream& scan(std::istream& is) = 0;
 public:
     List() {}
 
@@ -27,13 +25,25 @@ public:
 
     virtual List& operator = (const List&) = 0;
 
+    
+
     friend std::ostream& operator<<(std::ostream& os, const List& list) {
-        list.print(os);
+        auto cur = list.begin();
+        while (cur + 1 != list.end()) {
+            std::cout << cur->data << "<-";
+            cur++;
+        }
+        std::cout << cur->data;
+
         return os;
     }
 
     friend std::istream& operator>>(std::istream& is, List<T>& list) {
-        list.scan(is);
+        auto cur = list.begin();
+        while (cur != list.end()) {
+            std::cin << cur->data;
+            cur++;
+        }
         return is;
     }
 

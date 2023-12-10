@@ -7,5 +7,4 @@ int main() {
     s.push(3);
 
     std::cout << s << std::endl;
-
 }

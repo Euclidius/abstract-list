@@ -5,7 +5,7 @@
 template <typename T>
 class Stack: public List<T> {
   public:
-    Stack(): head(nullptr) {
+    Stack(): head(nullptr), base(nullptr){
        List<T>::size = 0;
     }
     
@@ -18,6 +18,7 @@ class Stack: public List<T> {
         this->head = new typename List<T>::Node(cur->data);
         typename List<T>::Node *ncur = this->head;
         List<T>::size = other.size;
+        base = other.base;
 
         while (cur->next) {
             cur = cur->next;
@@ -30,6 +31,7 @@ class Stack: public List<T> {
 
     Stack(Stack &&other) {
         this->head = other.head;
+        this->base = other.base;
         other.head = nullptr;
         List<T>::size = other.size;
     }
@@ -54,6 +56,7 @@ class Stack: public List<T> {
     void push(const T data) override {
         if (isEmpty()) {
             head = new typename List<T>::Node(data);
+            base = head;
         } else {
             head = new typename List<T>::Node(data, head);
         }
@@ -74,30 +77,13 @@ class Stack: public List<T> {
         }
     }
 
-    std::ostream& print(std::ostream& os) const override {
-        auto cur = begin();
-        while (cur + 1 != end()) {
-            std::cout << cur->data << "<-";
-            cur++;
-        }
-        std::cout << cur->data;
-        return os;
-    }
-
-
-    std::istream& scan(std::istream& is) override {
-        T elem;
-        std::cin >> elem;
-        push(elem);
-        return is;
-    }
-
     Stack &operator = (const Stack &other) {
         clear();
         typename List<T>::Node *cur = other.head;
         this->head = new typename List<T>::Node(cur->data);
         typename List<T>::Node* ncur = this->head;
         List<T>::size = other.size;
+        this->base = other.base;
 
         while (cur->next) {
             cur = cur->next;
@@ -112,6 +98,7 @@ class Stack: public List<T> {
         clear();
         List<T>::size = other.size;
         this->head = other.head;
+        this->base = other.base;
         other.head = nullptr;
         return *this;
     }
@@ -124,43 +111,21 @@ class Stack: public List<T> {
         *this = s;
         return *this;
     }
+
     typedef typename List<T>::iterator iterator;
-
-    iterator begin() override {return iterator(head);} ;
-    iterator end() override {
-        typename List<T>::Node *tmp = head;
-        for (size_t i = 0; i < List<T>::size - 1; ++i) {
-            tmp = tmp->next;
-        }
-        return iterator(tmp->next);
-    }
-
     typedef typename List<T>::const_iterator const_iterator;
 
+    iterator begin() override {return iterator(head);} ;
+    iterator end() override {return iterator(base->next);}
+
     const_iterator cbegin() const override {return const_iterator(head);};
-    const_iterator cend() const override {
-        const typename List<T>::Node *tmp = head;
-        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
-            tmp = tmp->next;
-        }
-        return const_iterator(tmp->next);
-    }
+    const_iterator cend() const override {return const_iterator(base->next);}
 
-
-    const_iterator begin() const override {
-        return const_iterator(head);
-    };
-
-
-    const_iterator end() const override {
-        const typename List<T>::Node *tmp = head;
-        for (size_t i = 0 ; i < List<T>::size - 1; ++i) {
-            tmp = tmp->next;
-        }
-        return const_iterator(tmp->next);
-    };
+    const_iterator begin() const override {return const_iterator(head);};
+    const_iterator end() const override {return const_iterator(base->next);};
 
   private:
     typename List<T>::Node* head;   
+    typename List<T>::Node* base;
 };
 
