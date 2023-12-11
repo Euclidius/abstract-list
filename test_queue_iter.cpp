@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "stack.h"
+#include "queue.h"
 
 using namespace std;
 
@@ -18,13 +18,13 @@ template <class T, class C> T sum (const C& c)
 {
     T res = 0;
     for (typename C::const_iterator i = c.begin(); i != c.end(); ++i)
-       res += i->data;
+       res += *i;
     return res;
 }
 
 int main()
 {
-    Stack<int> s1, s2;
+    Queue<int> s1, s2;
     numerate f(100);
 
     s1.push(1);
@@ -35,18 +35,18 @@ int main()
     s2 = s1;
     s2.push(4);
     
-    cout << s1 << endl;          // 3->2->1
+    cout << s1 << endl;          // 1->2->3
     cout << s1.getSize() << endl;
     
-    cout << s2 << endl;          // 4->3->2->1
+    cout << s2 << endl;          // 1->2->3->4
     cout << s2.getSize() << endl;
     
     swap(s1, s2);
     
-    cout << s1 << endl;          // 4->3->2->1
+    cout << s1 << endl;          // 1->2->3->4
     cout << s1.getSize() << endl;
     
-    cout << s2 << endl;          // 3->2->1
+    cout << s2 << endl;          // 1->2->3
     cout << s2.getSize() << endl;
     
     generate(s1.begin(), s1.end(), f);

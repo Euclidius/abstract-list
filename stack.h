@@ -118,11 +118,12 @@ class Stack: public List<T> {
     iterator begin() override {return iterator(head);} ;
     iterator end() override {return iterator(base->next);}
 
+    const_iterator begin() const override {return const_iterator(head);}
+    const_iterator end() const override {return const_iterator(base->next);}
+
     const_iterator cbegin() const override {return const_iterator(head);};
     const_iterator cend() const override {return const_iterator(base->next);}
 
-    const_iterator begin() const override {return const_iterator(head);};
-    const_iterator end() const override {return const_iterator(base->next);};
 
   private:
     typename List<T>::Node* head;   

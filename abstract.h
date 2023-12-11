@@ -22,10 +22,7 @@ public:
     virtual size_t getSize() const = 0;
     virtual T pop() = 0;
     virtual void push(const T data) = 0;
-
     virtual List& operator = (const List&) = 0;
-
-    
 
     friend std::ostream& operator<<(std::ostream& os, const List& list) {
         auto cur = list.begin();
@@ -51,15 +48,10 @@ public:
 
     class iterator {
       public:
-        iterator(Node *p_ = nullptr): p(p_) {};
-        using iterator_category = std::forward_iterator_tag;
-        using difference_type = std::ptrdiff_t;
-        using value_type = Node;
-        using pointer = Node*;
-        using reference = Node&;
+        iterator(Node *p_): p(p_) {};
 
-        reference operator * () const {return *p;}
-        pointer operator -> () const {return p;}
+        T& operator * () const {return p->data;}
+        Node* operator -> () const {return p;}
 
         iterator &operator ++ () {p = p->next; return *this;}
         iterator operator ++ (T) {iterator i = *this; p = p->next; return i;}
@@ -67,8 +59,8 @@ public:
         bool operator == (const iterator &i) const {return p == i.p;}
         bool operator != (const iterator &i) const {return p != i.p;}
 
-        bool operator == (const const_iterator &i) const;
-        bool operator != (const const_iterator &i) const;
+        bool operator == (const const_iterator &i) const {return p == i.p;}
+        bool operator != (const const_iterator &i) const {return p != i.p;}
 
         iterator operator + (size_t a) {
             iterator tmp = *this;
@@ -85,16 +77,11 @@ public:
 
     class const_iterator {
       public:
-        const_iterator(Node *p_ = nullptr): p(p_) {};
+        const_iterator(Node *p_): p(p_) {};
         const_iterator(const iterator &i): p(i.p) {};
-        using iterator_category = std::forward_iterator_tag;
-        using difference_type = std::ptrdiff_t;
-        using value_type = const Node;
-        using pointer = const Node*;
-        using reference = const Node&;
 
-        reference operator * () const {return p->data;}
-        pointer operator -> () const {return p;}
+        const T& operator * () const {return p->data;}
+        const Node* operator -> () const {return p;}
 
         const_iterator &operator ++ () {p = p->next; return *this;}
         const_iterator operator ++ (T) {const_iterator i = *this; p = p->next; return i;}
@@ -102,8 +89,8 @@ public:
         bool operator == (const const_iterator &i) const {return p == i.p;}
         bool operator != (const const_iterator &i) const {return p != i.p;}
 
-        bool operator == (const iterator &i) const;
-        bool operator != (const iterator &i) const;
+        bool operator == (const iterator &i) const {return p == i.p;}
+        bool operator != (const iterator &i) const {return p != i.p;};
 
         const_iterator operator + (size_t a) {
             const_iterator tmp = *this;
